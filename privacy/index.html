@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>omniguard - Privacy Policy</title>
+    <meta
+      name="description"
+      content="Privacy Policy for the omniguard browser extension and transaction simulation service."
+    />
+    <style>
+      body {
+        font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+        max-width: 720px;
+        margin: 40px auto;
+        padding: 0 20px 60px;
+        color: #1f2937;
+        line-height: 1.7;
+      }
+
+      h1 {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+
+      h2 {
+        font-size: 18px;
+        margin-top: 32px;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 6px;
+      }
+
+      p,
+      li {
+        font-size: 14px;
+      }
+
+      ul {
+        padding-left: 20px;
+      }
+
+      code {
+        word-break: break-word;
+      }
+
+      .updated {
+        color: #6b7280;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>omniguard Privacy Policy</h1>
+    <p class="updated">Last updated: 2026-04-17</p>
+
+    <h2>Overview</h2>
+    <p>
+      omniguard is a browser extension that simulates and explains blockchain transactions before
+      you sign them in your wallet. It highlights asset changes, approval changes, permission
+      changes, and potential risks.
+    </p>
+
+    <h2>Data Collection</h2>
+    <p>
+      omniguard does <strong>not</strong> sell personal data, run ad tracking, or include
+      analytics SDKs. It sends transaction payloads to the configured simulation API so the
+      transaction can be analyzed before signing.
+    </p>
+    <ul>
+      <li>
+        <strong>No account information</strong>: The extension does not require you to create an
+        account or provide any personal information.
+      </li>
+      <li>
+        <strong>No browsing history</strong>: The extension does not track your browsing activity
+        outside of transaction interception.
+      </li>
+      <li>
+        <strong>No analytics or tracking</strong>: The extension does not include any analytics,
+        telemetry, or tracking SDKs.
+      </li>
+    </ul>
+
+    <h2>Data Processing</h2>
+    <p>
+      The extension processes the following data locally and/or through a user-configured API
+      endpoint:
+    </p>
+    <ul>
+      <li>
+        <strong>Transaction parameters</strong>: When you initiate a transaction on a DApp (via
+        <code>eth_sendTransaction</code> or <code>eth_signTransaction</code>), the extension
+        captures the transaction parameters (<code>from</code>, <code>to</code>,
+        <code>value</code>, <code>data</code>, <code>chainId</code>) to send them for simulation
+        analysis.
+      </li>
+      <li>
+        <strong>Analysis results</strong>: Simulation results (asset changes, approvals,
+        permissions, risk assessment) are received from the API and displayed in the extension
+        popup and overlay.
+      </li>
+    </ul>
+
+    <h2>API Communication</h2>
+    <ul>
+      <li>
+        By default, the extension communicates with the hosted simulation API at
+        <code>https://trace-parser-2a3u6jbsja-as.a.run.app</code>.
+      </li>
+      <li>Users can configure a custom API URL through the extension settings.</li>
+      <li>
+        The API endpoint determines where transaction payloads are processed for simulation. The
+        default endpoint is operated for the extension's transaction-analysis purpose.
+      </li>
+    </ul>
+
+    <h2>Permissions Explanation</h2>
+    <ul>
+      <li><strong>activeTab</strong>: Required to interact with the current tab when analyzing transactions.</li>
+      <li><strong>storage</strong>: Used to save the user's API URL configuration locally.</li>
+      <li><strong>tabs</strong>: Required to send analysis results to the correct browser tab.</li>
+      <li>
+        <strong>host_permissions (&lt;all_urls&gt;)</strong>: Required to intercept wallet
+        transaction requests on any DApp website. This is necessary because DApps can be hosted on
+        any domain.
+      </li>
+    </ul>
+
+    <h2>Data Storage</h2>
+    <ul>
+      <li>
+        The extension uses <code>chrome.storage.local</code> to store the API URL, UI language
+        preference, install ID, and temporary API credentials returned by the simulation service
+        bootstrap flow.
+      </li>
+      <li>
+        Transaction data and analysis results are kept in memory only and are cleared when the tab
+        is closed or navigated away.
+      </li>
+      <li>
+        No wallet private keys, seed phrases, or browsing-history archives are stored by the
+        extension.
+      </li>
+    </ul>
+
+    <h2>Third-Party Services</h2>
+    <p>
+      The extension does not integrate with any third-party services, advertising networks, or data
+      brokers.
+    </p>
+
+    <h2>Children's Privacy</h2>
+    <p>This extension is not directed at children under 13 years of age.</p>
+
+    <h2>Changes to This Policy</h2>
+    <p>
+      We may update this privacy policy from time to time. Changes will be reflected in the
+      "Last updated" date above.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      If you have questions about this privacy policy, please open an issue on the project's GitHub
+      repository.
+    </p>
+  </body>
+</html>
