@@ -127,12 +127,16 @@
 
       if (!buttons.length || !panels.length) return;
 
-      const activate = (tabId) => {
+      const activate = (tabId, options = {}) => {
+        const { focus = false } = options;
+        let activeButton = null;
+
         buttons.forEach((button) => {
           const isActive = button.dataset.tabButton === tabId;
           button.classList.toggle('active', isActive);
           button.setAttribute('aria-selected', isActive ? 'true' : 'false');
           button.tabIndex = isActive ? 0 : -1;
+          if (isActive) activeButton = button;
         });
 
         panels.forEach((panel) => {
@@ -140,13 +144,34 @@
           panel.hidden = !isActive;
           panel.classList.toggle('active', isActive);
         });
+
+        if (focus && activeButton) {
+          activeButton.focus();
+        }
       };
 
-      buttons.forEach((button) => {
+      buttons.forEach((button, index) => {
         button.addEventListener('click', () => {
           const tabId = button.dataset.tabButton;
           if (!tabId) return;
           activate(tabId);
+        });
+
+        button.addEventListener('keydown', (event) => {
+          const key = event.key;
+          if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(key)) return;
+
+          event.preventDefault();
+
+          let nextIndex = index;
+          if (key === 'ArrowRight') nextIndex = (index + 1) % buttons.length;
+          if (key === 'ArrowLeft') nextIndex = (index - 1 + buttons.length) % buttons.length;
+          if (key === 'Home') nextIndex = 0;
+          if (key === 'End') nextIndex = buttons.length - 1;
+
+          const nextTabId = buttons[nextIndex]?.dataset.tabButton;
+          if (!nextTabId) return;
+          activate(nextTabId, { focus: true });
         });
       });
 
