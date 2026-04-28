@@ -102,15 +102,57 @@
     const targets = document.querySelectorAll('.fade-in');
     if (!targets.length) return;
 
+    const isInViewport = (element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.top < window.innerHeight - 36 && rect.bottom > 0;
+    };
+
+    const reveal = (element, observer) => {
+      element.classList.add('visible');
+      observer?.unobserve(element);
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach((element) => reveal(element));
+      return;
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+        reveal(entry.target, observer);
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -36px 0px' });
 
     targets.forEach((element) => observer.observe(element));
+
+    const revealVisibleTargets = () => {
+      targets.forEach((element) => {
+        if (!element.classList.contains('visible') && isInViewport(element)) {
+          reveal(element, observer);
+        }
+      });
+    };
+
+    const revealHashTarget = () => {
+      const hash = window.location.hash.slice(1);
+      if (!hash) return;
+
+      const target = document.getElementById(hash);
+      const animatedTarget = target?.closest('.fade-in');
+      if (animatedTarget && !animatedTarget.classList.contains('visible')) {
+        reveal(animatedTarget, observer);
+      }
+    };
+
+    const revealCurrentView = () => {
+      revealHashTarget();
+      revealVisibleTargets();
+    };
+
+    requestAnimationFrame(revealCurrentView);
+    window.addEventListener('load', () => requestAnimationFrame(revealCurrentView), { once: true });
+    window.addEventListener('hashchange', () => requestAnimationFrame(revealCurrentView));
   }
 
   function initTabs() {
