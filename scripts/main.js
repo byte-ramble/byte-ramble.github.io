@@ -1,6 +1,9 @@
 (() => {
   'use strict';
 
+  const LANGUAGE_KEY = 'omniguard-language';
+  const SUPPORTED_LANGUAGES = ['zh', 'en'];
+
   function getBrandContext() {
     const body = document.body;
     return {
@@ -8,6 +11,80 @@
       emailUser: body.dataset.emailUser || '',
       emailHost: body.dataset.emailHost || ''
     };
+  }
+
+  function getInitialLanguage() {
+    try {
+      const storedLanguage = window.localStorage.getItem(LANGUAGE_KEY);
+      if (SUPPORTED_LANGUAGES.includes(storedLanguage)) return storedLanguage;
+    } catch {
+      // Ignore storage access errors.
+    }
+
+    return 'zh';
+  }
+
+  function setElementText(element, language) {
+    if (!element.dataset.i18nZh) {
+      element.dataset.i18nZh = element.textContent || '';
+    }
+
+    element.textContent = language === 'en' ? element.dataset.i18nEn : element.dataset.i18nZh;
+  }
+
+  function setPlaceholder(element, language) {
+    if (!element.dataset.i18nPlaceholderZh) {
+      element.dataset.i18nPlaceholderZh = element.getAttribute('placeholder') || '';
+    }
+
+    element.setAttribute(
+      'placeholder',
+      language === 'en' ? element.dataset.i18nPlaceholderEn : element.dataset.i18nPlaceholderZh
+    );
+  }
+
+  function setAriaLabel(element, language) {
+    if (!element.dataset.i18nAriaLabelZh) {
+      element.dataset.i18nAriaLabelZh = element.getAttribute('aria-label') || '';
+    }
+
+    element.setAttribute(
+      'aria-label',
+      language === 'en' ? element.dataset.i18nAriaLabelEn : element.dataset.i18nAriaLabelZh
+    );
+  }
+
+  function applyLanguage(language) {
+    const nextLanguage = SUPPORTED_LANGUAGES.includes(language) ? language : 'zh';
+    document.documentElement.dataset.lang = nextLanguage;
+    document.documentElement.lang = nextLanguage === 'en' ? 'en' : 'zh-CN';
+    document.body.dataset.lang = nextLanguage;
+
+    document.querySelectorAll('[data-i18n-en]').forEach((element) => setElementText(element, nextLanguage));
+    document.querySelectorAll('[data-i18n-placeholder-en]').forEach((element) => setPlaceholder(element, nextLanguage));
+    document.querySelectorAll('[data-i18n-aria-label-en]').forEach((element) => setAriaLabel(element, nextLanguage));
+
+    document.querySelectorAll('[data-lang-option]').forEach((button) => {
+      const active = button.dataset.langOption === nextLanguage;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    try {
+      window.localStorage.setItem(LANGUAGE_KEY, nextLanguage);
+    } catch {
+      // Ignore storage access errors.
+    }
+  }
+
+  function initLanguageToggle() {
+    document.querySelectorAll('[data-lang-option]').forEach((button) => {
+      button.addEventListener('click', () => {
+        applyLanguage(button.dataset.langOption);
+      });
+    });
+
+    applyLanguage(getInitialLanguage());
   }
 
   function getEmailAddress() {
@@ -224,6 +301,7 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     initEmail();
+    initLanguageToggle();
     initMobileMenu();
     initSmoothScroll();
     initNavbarScroll();
