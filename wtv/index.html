@@ -1,7 +1,7 @@
-<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=/wtp"><title>Redirecting to WTP</title><script>
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=/wtp/"><title>Redirecting to WTP</title><script>
       const legacyPrefix = '#w' + 'tv-';
       const hash = window.location.hash.startsWith(legacyPrefix)
         ? '#wtp-' + window.location.hash.slice(legacyPrefix.length)
         : window.location.hash;
-      window.location.replace('/wtp' + (hash || ''));
-    </script></head> <body> <a href="/wtp">Redirecting to WTP standard page</a> </body></html>
+      window.location.replace('/wtp/' + (hash || ''));
+    </script></head> <body> <a href="/wtp/">Redirecting to WTP standard page</a> </body></html>

@@ -70,6 +70,17 @@
       button.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
 
+    document.querySelectorAll('[data-lang-toggle]').forEach((button) => {
+      const targetLanguage = nextLanguage === 'en' ? 'zh' : 'en';
+      const targetLabel = targetLanguage === 'en' ? 'EN' : 'CN';
+      const actionLabel = targetLanguage === 'en' ? 'Switch to English' : 'Switch to Chinese';
+
+      button.dataset.langTarget = targetLanguage;
+      button.textContent = targetLabel;
+      button.setAttribute('aria-label', actionLabel);
+      button.setAttribute('title', actionLabel);
+    });
+
     try {
       window.localStorage.setItem(LANGUAGE_KEY, nextLanguage);
     } catch {
@@ -81,6 +92,13 @@
     document.querySelectorAll('[data-lang-option]').forEach((button) => {
       button.addEventListener('click', () => {
         applyLanguage(button.dataset.langOption);
+      });
+    });
+
+    document.querySelectorAll('[data-lang-toggle]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const currentLanguage = document.documentElement.dataset.lang || getInitialLanguage();
+        applyLanguage(currentLanguage === 'en' ? 'zh' : 'en');
       });
     });
 
